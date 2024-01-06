@@ -1,0 +1,12 @@
+name = "rs4lapce"
+version = "0.1.0"
+display-name = "Rs4Lapce"
+author = "HTGAzureX1212"
+description = "Rust plugin for Lapce, powered by Rust Analyzer"
+repository = "https://github.com/TeamHarTex/rs4lapce"
+wasm = "bin/rs4lapce.wasm"
+icon = "rust-logo.svg"
+
+[activation]
+language = ["rust"]
+workspace-contains = ["*/Cargo.toml"]

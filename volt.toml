@@ -10,3 +10,7 @@ icon = "rust-logo.svg"
 [activation]
 language = ["rust"]
 workspace-contains = ["*/Cargo.toml"]
+
+[config."rustAnalyzer.nightly"]
+default = false
+description = "Whether to fetch daily nightly builds of rust-analyzer for usage in the editor."

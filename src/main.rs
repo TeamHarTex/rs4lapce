@@ -3,6 +3,7 @@ use lapce_plugin::psp_types::lsp_types::{InitializeParams, MessageType};
 use lapce_plugin::psp_types::Request;
 use lapce_plugin::{register_plugin, LapcePlugin, PLUGIN_RPC};
 
+mod config;
 mod init;
 
 #[derive(Default)]
@@ -16,7 +17,7 @@ impl LapcePlugin for Rs4Lapce {
             let Ok(parameters) = serde_json::from_value::<InitializeParams>(parameters) else {
                 PLUGIN_RPC.window_show_message(
                     MessageType::ERROR,
-                    String::from("failed to obtain plugin initialization parameters")
+                    String::from("failed to obtain plugin initialization parameters"),
                 );
 
                 return;

@@ -1,3 +1,5 @@
+#![feature(let_chains)]
+
 use lapce_plugin::psp_types::lsp_types::request::Initialize;
 use lapce_plugin::psp_types::lsp_types::{InitializeParams, MessageType};
 use lapce_plugin::psp_types::Request;

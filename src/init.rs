@@ -9,15 +9,21 @@ pub(crate) fn initialize_plugin(params: InitializeParams) -> Result<()> {
         .map(|value| serde_json::from_value::<PluginConfiguration>(value))
         .transpose()?;
 
-    if let Some(config) = config {
-        PLUGIN_RPC.window_show_message(
-            MessageType::INFO,
-            format!(
-                "using {} rust-analyzer",
-                if config.nightly { "nightly" } else { "stable" }
-            ),
-        )
-    }
+    let nightly = if let Some(config) = config
+        && let Some(rust_analyzer) = config.rust_analyzer
+    {
+        rust_analyzer.nightly
+    } else {
+        false
+    };
+
+    PLUGIN_RPC.window_show_message(
+        MessageType::INFO,
+        format!(
+            "using {} rust-analyzer",
+            if nightly { "nightly" } else { "stable" }
+        ),
+    );
 
     Ok(())
 }

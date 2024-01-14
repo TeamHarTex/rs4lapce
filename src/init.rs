@@ -1,5 +1,5 @@
 use crate::config::PluginConfiguration;
-use anyhow::{Error, Result};
+use anyhow::{anyhow, Error, Result};
 use flate2::read::GzDecoder;
 use lapce_plugin::psp_types::lsp_types::{DocumentFilter, InitializeParams, MessageType, Url};
 use lapce_plugin::{Http, VoltEnvironment, PLUGIN_RPC};
@@ -10,7 +10,7 @@ use std::{fs, io};
 pub(crate) fn initialize_plugin(params: InitializeParams) -> Result<()> {
     let config = params
         .initialization_options
-        .map(|value| serde_json::from_value::<PluginConfiguration>(value))
+        .map(serde_json::from_value::<PluginConfiguration>)
         .transpose()?;
 
     let nightly = if let Some(config) = &config
@@ -100,22 +100,20 @@ fn download_rust_analyzer(
     target_triple: &str,
 ) -> Result<()> {
     let gz_path = PathBuf::from("rust-analyzer.gz");
+    {
+        let url = if nightly {
+            format!("https://github.com/rust-lang/rust-analyzer/releases/download/nightly/rust-analyzer-{architecture}-{target_triple}.gz")
+        } else {
+            format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{architecture}-{target_triple}.gz")
+        };
+        let mut response = Http::get(&url)?;
+        let body = response.body_read_all()?;
+        fs::write(&gz_path, body)?;
 
-    let url = if nightly {
-        format!("https://github.com/rust-lang/rust-analyzer/releases/download/nightly/rust-analyzer-{architecture}-{target_triple}.gz")
-    } else {
-        format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{architecture}-{target_triple}.gz")
-    };
-
-    let mut response = Http::get(&url)?;
-    let body = response.body_read_all()?;
-    fs::write(&gz_path, body)?;
-
-    let mut gz = GzDecoder::new(File::open(&gz_path)?);
-    let mut file = File::create(target)?;
-    io::copy(&mut gz, &mut file)?;
-
-    fs::remove_file(&gz_path)?;
-
+        let mut gz = GzDecoder::new(File::open(&gz_path)?);
+        let mut file = File::create(target)?;
+        io::copy(&mut gz, &mut file)?;
+    }
+    fs::remove_file(&gz_path).map_err(|x| anyhow!("remove_file {:?} fail: {:?}", gz_path, x))?;
     Ok(())
 }

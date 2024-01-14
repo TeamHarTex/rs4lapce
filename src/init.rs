@@ -1,5 +1,5 @@
 use crate::config::PluginConfiguration;
-use anyhow::{anyhow, Error, Result};
+use anyhow::{anyhow, Result};
 use flate2::read::GzDecoder;
 use lapce_plugin::psp_types::lsp_types::{DocumentFilter, InitializeParams, MessageType, Url};
 use lapce_plugin::{Http, VoltEnvironment, PLUGIN_RPC};

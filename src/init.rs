@@ -38,9 +38,9 @@ pub(crate) fn initialize_plugin(params: InitializeParams) -> Result<()> {
                 format!("unsupported system architecture: {unsupported}"),
             );
 
-            return Err(Error::msg(format!(
+            return Err(anyhow!(
                 "unsupported system architecture: {unsupported}"
-            )));
+            ));
         }
     };
 
@@ -55,9 +55,9 @@ pub(crate) fn initialize_plugin(params: InitializeParams) -> Result<()> {
                 format!("unsupported operating system: {unsupported}"),
             );
 
-            return Err(Error::msg(format!(
+            return Err(anyhow!(
                 "unsupported operating system: {unsupported}"
-            )));
+            ));
         }
     };
 
@@ -114,6 +114,6 @@ fn download_rust_analyzer(
         let mut file = File::create(target)?;
         io::copy(&mut gz, &mut file)?;
     }
-    fs::remove_file(&gz_path).map_err(|x| anyhow!("remove_file {:?} fail: {:?}", gz_path, x))?;
+    fs::remove_file(&gz_path).map_err(|x| anyhow!("failed to remove {gz_path:?}: due to an error {x:?}"))?;
     Ok(())
 }

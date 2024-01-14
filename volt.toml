@@ -1,5 +1,5 @@
 name = "rs4lapce"
-version = "0.1.0"
+version = "0.1.1"
 display-name = "Rs4Lapce"
 author = "HTGAzureX1212"
 description = "Rust plugin for Lapce, powered by Rust Analyzer"

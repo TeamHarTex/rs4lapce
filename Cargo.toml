@@ -1,6 +1,6 @@
 [package]
 name = "rs4lapce"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["HTGAzureX1212."]
 edition = "2021"
 license = "Apache-2.0"

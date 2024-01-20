@@ -14,9 +14,24 @@ pub(crate) struct PluginConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct RustAnalyzerBuildsConfiguration {
     #[serde(default)]
-    #[serde(rename = "nightly")]
     pub nightly: bool,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
-pub struct RustAnalyzerConfiguration;
+pub struct RustAnalyzerConfiguration {
+    #[serde(default)]
+    pub cargo: Option<RustAnalyzerCargoConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+pub struct RustAnalyzerCargoConfiguration {
+    #[serde(default)]
+    #[serde(rename = "buildScripts")]
+    pub build_scripts: Option<RustAnalyzerCargoBuildScriptsConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+pub struct RustAnalyzerCargoBuildScriptsConfiguration {
+    #[serde(default)]
+    pub enable: bool,
+}
